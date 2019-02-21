@@ -24,6 +24,7 @@ public class ClientTest {
 
             String message = "coffee/1/3/2014/15" + "\n";
             writer.write(message);
+            writer.flush();
 
         } catch (IOException e) {
             e.printStackTrace();

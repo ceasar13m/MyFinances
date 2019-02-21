@@ -22,9 +22,9 @@ public class Worker extends Thread {
     @Override
     public void run() {
         try {
+            System.out.println("Новый поток...");
             writer = new BufferedWriter(new OutputStreamWriter(socket.getOutputStream()));
             reader = new BufferedReader(new InputStreamReader(socket.getInputStream()));
-            gson = new Gson();
             String message = null;
             message = reader.readLine();
             System.out.println("Получено сообщение: " + message);

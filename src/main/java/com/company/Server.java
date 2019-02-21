@@ -13,12 +13,20 @@ public class Server extends Thread {
     public void run() {
         try {
             ServerSocket serverSocket = new ServerSocket(8080);
+            System.out.println("Сервер запущен");
 
-            while(true) {
-                clientSocket = serverSocket.accept();
-                Worker worker = new Worker(clientSocket);
-                worker.start();
+            try {
+                while(true) {
+                    clientSocket = serverSocket.accept();
+                    Worker worker = new Worker(clientSocket);
+                    worker.start();
+                }
             }
+            finally {
+                serverSocket.close();
+            }
+
+
         } catch (IOException e) {
             e.printStackTrace();
         }
