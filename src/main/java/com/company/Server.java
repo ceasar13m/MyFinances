@@ -1,32 +1,24 @@
 package com.company;
 
-import java.io.BufferedReader;
-import java.io.BufferedWriter;
 import java.io.IOException;
 import java.net.ServerSocket;
 import java.net.Socket;
 
 public class Server extends Thread {
+    ServerSocket serverSocket;
     Socket clientSocket;
 
     @Override
     public void run() {
+        InMemoryDB inMemoryDB = new InMemoryDB();
         try {
-            ServerSocket serverSocket = new ServerSocket(8080);
-            System.out.println("Сервер запущен");
-
-            try {
+            serverSocket = new ServerSocket(8080);
+            System.out.println("########=>Сервер запущен");
                 while(true) {
                     clientSocket = serverSocket.accept();
-                    Worker worker = new Worker(clientSocket);
+                    Worker worker = new Worker(clientSocket, inMemoryDB);
                     worker.start();
                 }
-            }
-            finally {
-                serverSocket.close();
-            }
-
-
         } catch (IOException e) {
             e.printStackTrace();
         }
