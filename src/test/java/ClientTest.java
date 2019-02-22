@@ -30,8 +30,10 @@ public class ClientTest {
 
             Purchase purchase = new Purchase();
             purchase.name = "coffee";
-            purchase.date = "12.2012";
+            purchase.date = new Date();
             purchase.price = 15;
+
+            System.out.println(purchase);
 
             String message = gson.toJson(purchase, Purchase.class);
             writer.write(message + "\n");

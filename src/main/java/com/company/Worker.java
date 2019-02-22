@@ -30,17 +30,31 @@ public class Worker extends Thread {
             System.out.println("Новый поток...");
             writer = new BufferedWriter(new OutputStreamWriter(socket.getOutputStream()));
             reader = new BufferedReader(new InputStreamReader(socket.getInputStream()));
+            message = null;
             message = reader.readLine();
             while(true) {
                 System.out.println("Получено сообщение: " + message);
+
                 if(message.equals("exit"))
                     break;
+
+                switch (message) {
+                    case "add": {
+                        break;
+                    }
+                    case "get": {
+                        break;
+                    }
+                    default: {
+                        break;
+                    }
+                }
 
                 System.out.println(message);
                 Purchase purchase = gson.fromJson(message, Purchase.class);
 
-                inMemoryDB.purchases.put(purchase.date, purchase);
-                System.out.println(inMemoryDB.purchases.containsKey("11.2012"));
+                inMemoryDB.purchases.put(purchase.date.toString(), purchase);
+                System.out.println(inMemoryDB.purchases.containsKey("12.2012"));
 
                 message = reader.readLine();
 
