@@ -42,12 +42,12 @@ public class Worker extends Thread {
 
                 switch (command) {
                     case "add": {
-                        Purchase purchase = makePurchase(url);
-                        addProcess(purchase);
+                        Purchase purchase = makePurchaseObject(url);
+                        processAdd(purchase);
                         break;
                     }
                     case "get": {
-                        getProcess(url);
+                        processGet(url);
                         break;
                     }
                     default: {
@@ -71,31 +71,24 @@ public class Worker extends Thread {
         return command[0];
     }
 
-    Purchase makePurchase(String url) {
+    Purchase makePurchaseObject(String url) {
         String[] strings = url.split("/");
         return gson.fromJson(strings[1], Purchase.class);
     }
 
 
-    void addProcess(Purchase purchase) throws IOException {
-        inMemoryDB.purchases.put(purchase.date, purchase);
+    void processAdd(Purchase purchase) throws IOException {
+        inMemoryDB.add(purchase);
         writer.write("OK" + "\n");
         writer.flush();
     }
 
-    void getProcess(String url) throws IOException {
+    void processGet(String url) throws IOException {
 
         String[] strings = url.split("/");
         String date = strings[1];
 
-        int sum = 0;
-        for (String string: inMemoryDB.purchases.keySet()) {
-            System.out.println(sum);
-            if(string.equals(date)) {
-                Purchase purchase = inMemoryDB.purchases.get(string);
-                sum = sum + purchase.price;
-            }
-        }
+        int sum = inMemoryDB.get(date);
 
         System.out.println(sum);
         writer.write(sum);
