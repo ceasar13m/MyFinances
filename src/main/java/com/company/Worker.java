@@ -24,25 +24,30 @@ public class Worker extends Thread {
     @Override
     public void run() {
         System.out.println("Новый поток для клиента");
-        String message;
+        String url;
         gson = new Gson();
         try {
             System.out.println("Новый поток...");
             writer = new BufferedWriter(new OutputStreamWriter(socket.getOutputStream()));
             reader = new BufferedReader(new InputStreamReader(socket.getInputStream()));
-            message = null;
-            message = reader.readLine();
+            url = reader.readLine();
             while(true) {
-                System.out.println("Получено сообщение: " + message);
+                System.out.println("Получено сообщение: " + url);
+                String command = urlParsed(url);
 
-                if(message.equals("exit"))
+
+
+                if(command.equals("exit"))
                     break;
 
-                switch (message) {
+                switch (command) {
                     case "add": {
+                        Purchase purchase = makePurchase(url);
+                        addProcess(purchase);
                         break;
                     }
                     case "get": {
+                        getProcess(url);
                         break;
                     }
                     default: {
@@ -50,22 +55,51 @@ public class Worker extends Thread {
                     }
                 }
 
-                System.out.println(message);
-                Purchase purchase = gson.fromJson(message, Purchase.class);
-
-                inMemoryDB.purchases.put(purchase.date.toString(), purchase);
-                System.out.println(inMemoryDB.purchases.containsKey("12.2012"));
-
-                message = reader.readLine();
+                url = reader.readLine();
 
             }
+
+
+
         } catch (IOException e) {
             e.printStackTrace();
         }
 
     }
-
-    void makePurchase() {
-
+    String urlParsed(String url) {
+        String[] command = url.split("/");
+        return command[0];
     }
+
+    Purchase makePurchase(String url) {
+        String[] strings = url.split("/");
+        return gson.fromJson(strings[1], Purchase.class);
+    }
+
+
+    void addProcess(Purchase purchase) throws IOException {
+        inMemoryDB.purchases.put(purchase.date, purchase);
+        writer.write("OK" + "\n");
+        writer.flush();
+    }
+
+    void getProcess(String url) throws IOException {
+
+        String[] strings = url.split("/");
+        String date = strings[1];
+
+        int sum = 0;
+        for (String string: inMemoryDB.purchases.keySet()) {
+            System.out.println(sum);
+            if(string.equals(date)) {
+                Purchase purchase = inMemoryDB.purchases.get(string);
+                sum = sum + purchase.price;
+            }
+        }
+
+        System.out.println(sum);
+        writer.write(sum);
+        writer.flush();
+    }
+
 }

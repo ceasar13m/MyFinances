@@ -30,13 +30,46 @@ public class ClientTest {
 
             Purchase purchase = new Purchase();
             purchase.name = "coffee";
-            purchase.date = new Date();
+            purchase.date = "02.2018";
             purchase.price = 15;
 
-            System.out.println(purchase);
 
             String message = gson.toJson(purchase, Purchase.class);
-            writer.write(message + "\n");
+            writer.write("add/" + message + "\n");
+            writer.flush();
+            System.out.println(reader.readLine());
+
+            //------------------------------------------------------------------------
+
+
+            purchase.name = "tea";
+            purchase.date = "02.2018";
+            purchase.price = 10;
+
+
+            message = gson.toJson(purchase, Purchase.class);
+            writer.write("add/" + message + "\n");
+            writer.flush();
+
+            System.out.println(reader.readLine());
+
+            //-------------------------------------------------------------------------
+
+            purchase.name = "burger";
+            purchase.date = "02.2018";
+            purchase.price = 2678;
+
+
+            message = gson.toJson(purchase, Purchase.class);
+            writer.write("add/" + message + "\n");
+            writer.flush();
+
+            System.out.println(reader.readLine());
+
+            //-------------------------------------------------------------------------
+
+
+            writer.write("get/" + "02.2018" + "\n");
             writer.flush();
 
             System.out.println(reader.readLine());

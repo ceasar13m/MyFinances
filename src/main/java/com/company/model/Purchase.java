@@ -5,15 +5,13 @@ import java.util.Date;
 
 public class Purchase {
     public String name;
-    public Date date;
+    public String date;
     public int price;
 
 
 
     @Override
     public String toString() {
-
-        SimpleDateFormat simpleDateFormat = new SimpleDateFormat("MM.yyyy");
-        return name + " " + simpleDateFormat.format(date) + " " + price;
+        return name + " " + date + " " + price;
     }
 }
