@@ -84,14 +84,10 @@ public class Worker extends Thread {
     }
 
     void processGet(String url) throws IOException {
-
         String[] strings = url.split("/");
-        String date = strings[1];
-
-        int sum = inMemoryDB.get(date);
-
-        System.out.println(sum);
-        writer.write(sum);
+        int sum =  0;
+        sum = inMemoryDB.get(strings[1]);
+        writer.write(sum + "\n");
         writer.flush();
     }
 

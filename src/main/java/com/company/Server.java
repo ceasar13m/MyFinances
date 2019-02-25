@@ -12,7 +12,7 @@ public class Server extends Thread {
     public void run() {
         InMemoryDB inMemoryDB = new InMemoryDB();
         try {
-            serverSocket = new ServerSocket(8080);
+            serverSocket = new ServerSocket(8012);
             System.out.println("########=>Сервер запущен");
                 while(true) {
                     clientSocket = serverSocket.accept();
